@@ -18,7 +18,7 @@ public class Driver {
         }
     }
 
-    public void testKeyValue(String description, HashInterface<Integer, Integer> hashTable, Integer key, Integer value) {
+    public void testKeyValue(String description, HashInterface<Integer, Integer> hashTable, Integer key, Integer value) throws RuntimeException {
         final int previousCollisions = hashTable.getCollisions();
 
         hashTable.put(key, value);
@@ -33,7 +33,6 @@ public class Driver {
 
     public void testInputKey(Integer key, HashInterface<Integer, Integer> lph) {
         Integer value = key * 2;
-
         testKeyValue("Linear", lph, key, value);
     }
 
