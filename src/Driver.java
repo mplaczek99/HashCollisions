@@ -1,14 +1,15 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Driver {
-    final int tableSize = 191;
-    final int doubleFactor = 181;
+    final int tableSize = 191; // hash table size
+    final int doubleFactor = 181; // factor R to be used in double hashing
 
-    OutputStream fout;
-
-    ArrayList<Integer> data = new ArrayList<>();
+    OutputStream fout; // declare and create an output stream
+    ArrayList<Integer> data = new ArrayList<>(); // all keys from the input file
 
     public Driver(int number) {
         try {
@@ -18,7 +19,7 @@ public class Driver {
         }
     }
 
-    public void testKeyValue(String description, HashInterface<Integer, Integer> hashTable, Integer key, Integer value) throws RuntimeException {
+    public void testKeyValue(String description, HashInterface<Integer, Integer> hashTable, final Integer key, final Integer value) throws RuntimeException {
         final int previousCollisions = hashTable.getCollisions();
 
         hashTable.put(key, value);
@@ -26,25 +27,41 @@ public class Driver {
         final Integer retrievedValue = hashTable.get(key);
         final String retrievedText = retrievedValue != null ? toString() : null; // I do not know if typed correctly
 
+        // fout...
+
         if (retrievedValue == null || !(retrievedValue.equals(value))) {
+            // fout...
             throw new RuntimeException("value mismatch");
         }
     }
 
-    public void testInputKey(Integer key, HashInterface<Integer, Integer> lph) {
-        Integer value = key * 2;
+    public void testInputKey(final Integer key, HashInterface<Integer, Integer> lph) { // Removed other hashing
+        final Integer value = key * 2;
+
         testKeyValue("Linear", lph, key, value);
+        // Removed other hashing
+
+        // fout...
     }
 
-    public void testData(String description) {
+    public void testData(final String description) {
+        // fout...
+
         LinearProbingHash<Integer, Integer> lph = new LinearProbingHash(tableSize);
+        // Removed other hashing
 
         for (Integer key : data) {
             testInputKey(key, lph);
         }
+
+        // fout...
+        // fout...
+        // fout...
+
+        // fout...
     }
 
-    public void readData(String inputFile) throws FileNotFoundException {
+    public void readData(final String inputFile) throws FileNotFoundException {
         // InputStream fin = new FileInputStream(inputFile);
         // Integer key
 
@@ -57,7 +74,7 @@ public class Driver {
         scanner.close();
     }
 
-    public void testFile(String inputFilename, String outputFilename) throws FileNotFoundException {
+    public void testFile(final String inputFilename, final String outputFilename) throws FileNotFoundException {
         System.out.println("Input file: " + inputFilename + ", output file: " + outputFilename);
 
         readData(inputFilename);
