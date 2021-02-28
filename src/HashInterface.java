@@ -1,4 +1,4 @@
-public interface HashInterface<I extends Number, I1 extends Number> {
+public interface HashInterface {
     Integer get(Integer key);
     void put(Integer key, Integer value);
     int getCollisions();
