@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Integer> {
     Record[] table;
     int collisions;

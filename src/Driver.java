@@ -6,7 +6,7 @@ public class Driver {
     final int tableSize = 191; // hash table size
     final int doubleFactor = 181; // factor R to be used in double hashing
 
-    OutputStream fout; // declare and create an output stream
+    FileOutputStream fout; // declare and create an output stream
     ArrayList<Integer> data = new ArrayList<>(); // all keys from the input file
 
     public Driver(int number) {
@@ -23,12 +23,12 @@ public class Driver {
         hashTable.put(key, value);
 
         final Integer retrievedValue = hashTable.get(key);
-        final String retrievedText = retrievedValue != null ? toString() : null; // I do not know if typed correctly
+        final String retrievedText = retrievedValue.toString(); // email / discord someone about this
 
-        // fout...
+        System.out.print(key + " : " + value + " --> " + retrievedText + ", collisions " + (hashTable.getCollisions() - previousCollisions) + "\n");
 
         if (retrievedValue == null || !(retrievedValue.equals(value))) {
-            // fout...
+            System.out.print("Retrieved value " + retrievedText + " does not match stored value"  + value + " for key " + key + "\n");
             throw new RuntimeException("value mismatch");
         }
     }
@@ -37,13 +37,16 @@ public class Driver {
         final Integer value = key * 2;
 
         testKeyValue("Linear", lph, key, value);
+        // testKeyValue("Quadratic", qph, key, value);
+        // testKeyValue("Double", lph, key, value);
+
         // Removed other hashing
 
-        // fout...
+        System.out.print("\n");
     }
 
     public void testData(final String description) {
-        // fout...
+        System.out.print("*** " + description + " Start ***" + "\n\n");
 
         LinearProbingHash<Integer, Integer> lph = new LinearProbingHash(tableSize);
         // Removed other hashing
@@ -52,17 +55,14 @@ public class Driver {
             testInputKey(key, lph);
         }
 
-        // fout...
-        // fout...
-        // fout...
+        System.out.print("Linear    " + lph.getCollisions() + " collisions" + "\n");
+        // System.out.print("Quadratic " + qph.getCollisions() + " collisions" + "\n");
+        // System.out.print("Double    " + dhph.getCollisions() + " collisions" + "\n");
 
-        // fout...
+        System.out.print("\n" + "*** " + description + " End ***" + "\n\n");
     }
 
     public void readData(final String inputFile) throws FileNotFoundException {
-        // InputStream fin = new FileInputStream(inputFile);
-        // Integer key
-
         Scanner scanner= new Scanner(new File(inputFile ));
 
         while (scanner.hasNext()) {
@@ -72,11 +72,13 @@ public class Driver {
         scanner.close();
     }
 
-    public void testFile(final String inputFilename, final String outputFilename) throws FileNotFoundException {
-        System.out.println("Input file: " + inputFilename + ", output file: " + outputFilename);
-
+    public void testFile(final String inputFilename, final String outputFilename) throws IOException {
         readData(inputFilename);
         fout = new FileOutputStream(outputFilename);
+        PrintStream ps = new PrintStream(fout);
+        System.setOut(ps);
+
+        //System.out.println("Input file: " + inputFilename + ", output file: " + outputFilename);
 
         testData("Random Order");
 
@@ -86,9 +88,9 @@ public class Driver {
         // SORT_IN_DESCENDING_ORDER
         // testData("Descending Order");
 
-        // fout.close();
+        fout.close();
 
-        System.out.println("Done");
+        //System.out.println("Done");
     }
 
     public static void main(String[] args) {
