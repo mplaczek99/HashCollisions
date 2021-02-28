@@ -1,8 +1,8 @@
-public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Integer> {
+public class LinearProbingHash implements HashInterface<Integer, Integer> {
     Record[] table;
     int collisions;
 
-    private class Record { // I think the class should be private
+    private static class Record { // I think the class should be private
         Integer key;
         Integer value;
 
@@ -12,10 +12,8 @@ public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Int
         }
     }
 
-    public LinearProbingHash(int initialSize) { // constructor
-        initialSize = 191;
-
-        table = (Record[]) new LinearProbingHash.Record[initialSize]; // Workaround of Generic array creation error
+    public LinearProbingHash(int initialSize) {
+        table = new Record[initialSize];
 
         collisions = 0;
     }
@@ -61,13 +59,13 @@ public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Int
         return (key >> 8) | ((key&0xff)<<16);
     }
 
-    private final int hashIndex(final Integer key) {
+    private int hashIndex(final Integer key) {
         final int index = hash(key);
 
         return index % table.length;
     }
 
-    private final int lookUp(Integer key) {
+    private int lookUp(Integer key) {
         final int startIndex = hashIndex(key);
         int index = startIndex;
 

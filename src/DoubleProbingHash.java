@@ -1,9 +1,9 @@
-public class DoubleProbingHash<Key, Value> implements HashInterface<Integer, Integer> {
+public class DoubleProbingHash implements HashInterface<Integer, Integer> {
     Record[] table;
     int collisions;
     int doubleFactor;
 
-    private class Record { // I think the class should be private
+    private static class Record { // I think the class should be private
         Integer key;
         Integer value;
 
@@ -13,10 +13,8 @@ public class DoubleProbingHash<Key, Value> implements HashInterface<Integer, Int
         }
     }
 
-    public DoubleProbingHash(int initialSize, int factor) { // constructor
-        initialSize = 191;
-
-        table = (Record[]) new DoubleProbingHash.Record[initialSize]; // Workaround of Generic array creation error
+    public DoubleProbingHash(int initialSize, int factor) {
+        table = new Record[initialSize];
 
         collisions = 0;
         doubleFactor = factor;
@@ -65,13 +63,13 @@ public class DoubleProbingHash<Key, Value> implements HashInterface<Integer, Int
         return doubleFactor - (hash(key) % doubleFactor);
     }
 
-    private final int hashIndex(final Integer key) {
+    private int hashIndex(final Integer key) {
         final int index = hash(key);
 
         return index % table.length;
     }
 
-    private final int lookUp(Integer key) {
+    private int lookUp(Integer key) {
         final int startIndex = hashIndex(key);
         int index = startIndex;
 

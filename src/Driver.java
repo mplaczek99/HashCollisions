@@ -12,12 +12,12 @@ public class Driver {
     public Driver(int number) {
         try {
             testFile("src/in" + number + ".txt", "src/out" + number + ".txt");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.getLocalizedMessage();
         }
     }
 
-    public void testKeyValue(String description, HashInterface<Integer, Integer> hashTable, final Integer key, final Integer value) throws RuntimeException {
+    public void testKeyValue(HashInterface<Integer, Integer> hashTable, final Integer key, final Integer value) throws RuntimeException {
         final int previousCollisions = hashTable.getCollisions();
 
         hashTable.put(key, value);
@@ -25,9 +25,9 @@ public class Driver {
         final Integer retrievedValue = hashTable.get(key);
         final String retrievedText = retrievedValue.toString(); // email / discord someone about this
 
-        System.out.print(key + " : " + value + " --> " + retrievedText + ", collisions " + (hashTable.getCollisions() - previousCollisions) + "\n");
+        System.out.print(key + " : " + value + " -> " + retrievedText + ", collisions " + (hashTable.getCollisions() - previousCollisions) + "\n");
 
-        if (retrievedValue == null || !(retrievedValue.equals(value))) {
+        if (!retrievedValue.equals(value)) {
             System.out.print("Retrieved value " + retrievedText + " does not match stored value"  + value + " for key " + key + "\n");
 
             throw new RuntimeException("value mismatch");
@@ -37,9 +37,9 @@ public class Driver {
     public void testInputKey(final Integer key, HashInterface<Integer, Integer> lph, HashInterface<Integer, Integer> qph, HashInterface<Integer, Integer> dhph) { // Removed other hashing
         final Integer value = key * 2;
 
-        testKeyValue("Linear", lph, key, value);
-        testKeyValue("Quadratic", qph, key, value);
-        testKeyValue("Double", dhph, key, value);
+        testKeyValue(lph, key, value);
+        testKeyValue(qph, key, value);
+        testKeyValue(dhph, key, value);
 
         System.out.print("\n");
     }
@@ -47,9 +47,9 @@ public class Driver {
     public void testData(final String description) {
         System.out.print("*** " + description + " Start ***" + "\n\n");
 
-        LinearProbingHash<Integer, Integer> lph = new LinearProbingHash<>(tableSize);
-        QuadraticProbingHash<Integer, Integer> qph = new QuadraticProbingHash<>(tableSize);
-        DoubleProbingHash<Integer, Integer> dhph = new DoubleProbingHash<>(tableSize, doubleFactor);
+        LinearProbingHash lph = new LinearProbingHash(tableSize);
+        QuadraticProbingHash qph = new QuadraticProbingHash(tableSize);
+        DoubleProbingHash dhph = new DoubleProbingHash(tableSize, doubleFactor);
 
         for (Integer key : data) {
             testInputKey(key, lph, qph, dhph);
