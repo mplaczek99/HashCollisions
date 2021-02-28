@@ -1,8 +1,8 @@
-public class QuadraticProbingHash implements HashInterface<Integer, Integer> {
+public class QuadraticProbingHash implements HashInterface {
     Record[] table;
     int collisions;
 
-    private static class Record { // I think the class should be private
+    private static class Record {
         Integer key;
         Integer value;
 

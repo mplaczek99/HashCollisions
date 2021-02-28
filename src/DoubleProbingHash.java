@@ -1,9 +1,9 @@
-public class DoubleProbingHash implements HashInterface<Integer, Integer> {
+public class DoubleProbingHash implements HashInterface {
     Record[] table;
     int collisions;
     int doubleFactor;
 
-    private static class Record { // I think the class should be private
+    private static class Record {
         Integer key;
         Integer value;
 

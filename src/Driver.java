@@ -17,7 +17,7 @@ public class Driver {
         }
     }
 
-    public void testKeyValue(HashInterface<Integer, Integer> hashTable, final Integer key, final Integer value) throws RuntimeException {
+    public void testKeyValue(HashInterface hashTable, final Integer key, final Integer value) throws RuntimeException {
         final int previousCollisions = hashTable.getCollisions();
 
         hashTable.put(key, value);
@@ -34,7 +34,7 @@ public class Driver {
         }
     }
 
-    public void testInputKey(final Integer key, HashInterface<Integer, Integer> lph, HashInterface<Integer, Integer> qph, HashInterface<Integer, Integer> dhph) { // Removed other hashing
+    public void testInputKey(final Integer key, HashInterface lph, HashInterface qph, HashInterface dhph) { // Removed other hashing
         final Integer value = key * 2;
 
         testKeyValue(lph, key, value);
