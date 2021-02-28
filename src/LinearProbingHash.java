@@ -1,10 +1,10 @@
-import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Integer> {
-    ArrayList<Record> table; // vector or array type
+    Record[] table;
     int collisions;
 
-    private class Record {
+    private class Record { // I think the class should be private
         Integer key;
         Integer value;
 
@@ -17,8 +17,8 @@ public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Int
     public LinearProbingHash(int initialSize) { // constructor
         initialSize = 191;
 
-        table = new ArrayList<>(initialSize);
-        System.out.println(table);
+        table = (Record[]) new LinearProbingHash.Record[initialSize]; // Workaround of Generic array creation error
+
         collisions = 0;
     }
 
@@ -26,11 +26,11 @@ public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Int
     public Integer get(final Integer key) {
         final int index = lookUp(key);
 
-        if (index > table.size()) {
+        if (index > table.length) {
             return null;
         }
 
-        Record p = table.get(index);
+        Record p = table[index];
 
         return p.value;
     }
@@ -39,14 +39,14 @@ public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Int
     public void put(final Integer key, final Integer value) throws RuntimeException {
         final int index = lookUp(key);
 
-        if (index > table.size()) {
+        if (index > table.length) {
             throw new RuntimeException("Table is full");
         }
 
-        Record p = table.get(index);
+        Record p = table[index];
 
         if (p == null) {
-            table.set(index, new Record(key, value));
+            table[index] = new Record(key, value);
         } else {
             p.value = value;
         }
@@ -59,7 +59,6 @@ public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Int
 
     private static int hash(final Integer key) {
         // scramble the key via bitwise operations
-        // for simplicity, it is assumed that Key is some kind of number
 
         return (key >> 8) | ((key&0xff)<<16);
     }
@@ -67,9 +66,7 @@ public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Int
     private final int hashIndex(final Integer key) {
         final int index = hash(key);
 
-        // Stops here? , table is not a thing
-        System.out.println(index % table.size());
-        return index % table.size();
+        return index % table.length;
     }
 
     private final int lookUp(Integer key) {
@@ -77,7 +74,7 @@ public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Int
         int index = startIndex;
 
         while (true) {
-            final Record p = table.get(index);
+            final Record p = table[index];
 
             if (p == null || p.key.equals(key)) {
                 return index;
@@ -85,10 +82,10 @@ public class LinearProbingHash<Key, Value> implements HashInterface<Integer, Int
 
             collisions ++;
             index ++;
-            index %= table.size();
+            index %= table.length;
 
             if (index == startIndex) {
-                return table.size() + 1;
+                return table.length + 1;
             }
         }
     }
