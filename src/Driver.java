@@ -29,18 +29,17 @@ public class Driver {
 
         if (retrievedValue == null || !(retrievedValue.equals(value))) {
             System.out.print("Retrieved value " + retrievedText + " does not match stored value"  + value + " for key " + key + "\n");
+
             throw new RuntimeException("value mismatch");
         }
     }
 
-    public void testInputKey(final Integer key, HashInterface<Integer, Integer> lph) { // Removed other hashing
+    public void testInputKey(final Integer key, HashInterface<Integer, Integer> lph, HashInterface<Integer, Integer> qph, HashInterface<Integer, Integer> dhph) { // Removed other hashing
         final Integer value = key * 2;
 
         testKeyValue("Linear", lph, key, value);
-        // testKeyValue("Quadratic", qph, key, value);
-        // testKeyValue("Double", lph, key, value);
-
-        // Removed other hashing
+        testKeyValue("Quadratic", qph, key, value);
+        testKeyValue("Double", dhph, key, value);
 
         System.out.print("\n");
     }
@@ -48,16 +47,17 @@ public class Driver {
     public void testData(final String description) {
         System.out.print("*** " + description + " Start ***" + "\n\n");
 
-        LinearProbingHash<Integer, Integer> lph = new LinearProbingHash(tableSize);
-        // Removed other hashing
+        LinearProbingHash<Integer, Integer> lph = new LinearProbingHash<>(tableSize);
+        QuadraticProbingHash<Integer, Integer> qph = new QuadraticProbingHash<>(tableSize);
+        DoubleProbingHash<Integer, Integer> dhph = new DoubleProbingHash<>(tableSize, doubleFactor);
 
         for (Integer key : data) {
-            testInputKey(key, lph);
+            testInputKey(key, lph, qph, dhph);
         }
 
         System.out.print("Linear    " + lph.getCollisions() + " collisions" + "\n");
-        // System.out.print("Quadratic " + qph.getCollisions() + " collisions" + "\n");
-        // System.out.print("Double    " + dhph.getCollisions() + " collisions" + "\n");
+        System.out.print("Quadratic " + qph.getCollisions() + " collisions" + "\n");
+        System.out.print("Double    " + dhph.getCollisions() + " collisions" + "\n");
 
         System.out.print("\n" + "*** " + description + " End ***" + "\n\n");
     }
