@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Driver {
@@ -73,24 +74,27 @@ public class Driver {
     }
 
     public void testFile(final String inputFilename, final String outputFilename) throws IOException {
-        readData(inputFilename);
+        PrintStream original = new PrintStream(System.out);
         fout = new FileOutputStream(outputFilename);
         PrintStream ps = new PrintStream(fout);
+
+        readData(inputFilename);
+
+        System.out.println("Input file: " + inputFilename + ", output file: " + outputFilename);
+
         System.setOut(ps);
-
-        //System.out.println("Input file: " + inputFilename + ", output file: " + outputFilename);
-
         testData("Random Order");
 
-        // SORT_IN_ASCENDING_ORDER(data)
-        // testData("Ascending Order");
+        Collections.sort(data);
+        testData("Ascending Order");
 
-        // SORT_IN_DESCENDING_ORDER
-        // testData("Descending Order");
+        data.sort(Collections.reverseOrder());
+        testData("Descending Order");
 
         fout.close();
 
-        //System.out.println("Done");
+        System.setOut(original);
+        System.out.println("Done");
     }
 
     public static void main(String[] args) {
